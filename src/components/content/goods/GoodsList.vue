@@ -29,5 +29,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    
+    padding: 2px;
   }
 </style>

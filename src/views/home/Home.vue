@@ -53,7 +53,8 @@
         isShowBack: false, // 回顶部按钮的显示默认为false
         offsetTop: 0, // 距离顶部的距离
         isTabfixd: false, // 是否显示另一个tab来实现吸顶效果
-        saveY: 0, //离开时的位置
+        saveY: 0, // 离开时的位置
+        imgLoadListener: null // 保存图片加载监听函数
       }
     },
     components: {
@@ -72,7 +73,7 @@
       }
     },
     destroyed() {
-      console.log('home.vue被销毁了');
+      // console.log('home.vue被销毁了');
     },
     // 活跃时自动滑动到上次离开的位置
     activated() {
@@ -81,8 +82,10 @@
     },
     // 记录离开的位置
     deactivated() {
-      // 保存离开时的位置信息
+      // 1. 保存离开时的位置信息
       this.saveY = this.$refs.scroll.getSaveY();
+      // 2. 取消图片加载函数的监听
+      this.$bus.$off('imgRefresh', this.imgLoadListener);
     },
     // create中的this是当前组件
     created() {
@@ -96,13 +99,13 @@
     mounted() {
       // 1. 图片加载完成的事件监听 解决首页滚动区域bug
       const refresh = debounce(this.$refs.scroll.refresh, 10);
-      this.$bus.$on('imgRefresh', () => {
+
+      this.imgLoadListener = () => {
         // this.$refs.scroll && this.$refs.scroll.refresh();
         // 添加防抖功能
         refresh();
-      })
-
-      // 2. 获取tab-control的offsetTops属性
+      }
+      this.$bus.$on('imageLoad', this.imgLoadListener);
     },
     methods: {
       /*
@@ -196,7 +199,6 @@
 
   .content {
     overflow: hidden;
-
     position: absolute;
     top: 44px;
     bottom: 49px;

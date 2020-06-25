@@ -1,6 +1,6 @@
 <template>
-  <div class="goods-item">
-    <img :src="goodsItem.show.img" @load="imageRefresh"/>
+  <div class="goods-item" @click="goodsitemClick">
+    <img :src="showImage" @load="imageLoad"/>
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
@@ -20,10 +20,29 @@
         }
       }
     },
+    computed: {
+      // 主商品和推荐商品的存储方式不同
+      showImage() {
+        return this.goodsItem.image || this.goodsItem.show.img
+      }
+    },
     methods: {
-      imageRefresh() {
-        // console.log(this.$bus);
-        this.$bus.$emit('imgRefresh');
+      // 方式二：通过取消函数监听
+      imageLoad() {
+        this.$bus.$emit('imageLoad');
+      },
+
+			// 方式一：通过路由路径来选择不同的事件监听
+      /* imageLoad() {
+				if(this.$route.path.indexOf('/home')) {
+					this.$bus.$emit('homeImgRefresh');
+				}else if(this.$route.path.indexOf('/detail')) {
+					this.$bus.$emit('detailImgRefresh');
+				}
+      }, */
+      goodsitemClick() {
+        // console.log('点击商品详情');
+        this.$router.push('/detail/' + this.goodsItem.iid);
       }
     }
   }

@@ -25,3 +25,5 @@ export function request(config) {
   // 3. 传入对象进行网络请求
   return instance(config); //本身返回的是一个回调函数
 }
+
+
