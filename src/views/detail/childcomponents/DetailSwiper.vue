@@ -1,8 +1,8 @@
 <template>
   <swiper class="detail-swiper">
-    <Swiper-item v-for="item in topImages">
-      <img :src="item" />
-    </Swiper-item>
+    <swiper-item v-for="(item, index) in topImages" :key="index">
+      <img :src="item" alt="">
+    </swiper-item>
   </swiper>
 </template>
 
@@ -11,6 +11,10 @@
 
   export default {
     name: "DetailSwiper",
+    components: {
+      Swiper,
+      SwiperItem
+    },
     props: {
       topImages: {
         type: Array,
@@ -18,17 +22,13 @@
           return []
         }
       }
-    },
-    components: {
-      Swiper,
-      SwiperItem
     }
   }
 </script>
 
-<style>
-  .detail-swiper{
-    height: 350px;
+<style scoped>
+  .detail-swiper {
+    height: 300px;
     overflow: hidden;
   }
 </style>

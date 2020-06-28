@@ -34,7 +34,9 @@ const routes = [
     component:Profile
   },
   {
-    path: '/detail/:iid',
+		// 动态路由写法
+    // path: '/detail/:iid',
+		path: '/detail',
     component: Detail
   }
 ]

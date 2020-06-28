@@ -1,24 +1,24 @@
 <template>
-  <div v-if="Object.keys(commentInfo).length !== 0" class="comment-info">
+  <div class="commend-info" v-if="Object.keys(commentInfo).length !== 0">
     <div class="info-header">
-      <div class="header-title">用户评价</div>
-      <div class="header-more">
-        更多
-        <i class="arrow-right"></i>
-      </div>
+     <div class="header-title">用户评价</div>
+     <div class="header-more">
+       更多
+       <i class="arrow-right"></i>
+     </div>
     </div>
     <div class="info-user">
-      <img :src="commentInfo.user.avatar" />
-      <span>{{ commentInfo.user.uname }}</span>
+      <img :src="commentInfo.list[0].user.avatar" />
+      <span>{{ commentInfo.list[0].user.uname }}</span>
     </div>
     <div class="info-detail">
-      <p>{{ commentInfo.content }}</p>
+      <p>{{ commentInfo.list[0].content }}</p>
       <div class="info-other">
-        <span class="date">{{ commentInfo.created | showDate }}</span>
-        <span>{{ commentInfo.style }}</span>
+        <span class="date">{{ commentInfo.list[0].created | showDate}}</span>
+        <span>{{ commentInfo.list[0].style }}</span>
       </div>
       <div class="info-imgs">
-        <img :src="item" v-for="(item, index) in commentInfo.images" :key="index"/>
+        <img :src="item" v-for="(item, index) in commentInfo.list[0].images" :key="index" />
       </div>
     </div>
   </div>
@@ -27,8 +27,8 @@
 <script>
   import {formatDate} from 'common/utils'
 
-  export default{
-    name: "DetailCommentInfo",
+  export default {
+    name: "DetailCommendInfo",
     props: {
       commentInfo: {
         type: Object,
@@ -38,11 +38,11 @@
       }
     },
     filters: {
-      // 将时间戳改成普通时间样式
       showDate(value) {
-        // 1. 先将时间戳转为Date格式
-        const date = new Date(value*1000);
-        // 2. 将date进行格式化
+        // 1. 将时间戳转成Date对象,毫秒为单位
+        const date = new Date(value * 1000);
+        
+        // 2. 进行格式化
         return formatDate(date, 'yyyy-MM-dd');
       }
     }
@@ -50,16 +50,16 @@
 </script>
 
 <style scoped>
-  .comment-info {
+  .commend-info {
     padding: 5px 12px;
     color: #333;
-    border-bottom: 5px solid #f2f5f8;
+    border-bottom: 5px solid #F2F5F8;
   }
 
   .info-header {
     height: 50px;
     line-height: 50px;
-    border-bottom: 1px solid raga(0, 0, 0, .1);
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
   }
 
   .header-title {
@@ -68,7 +68,7 @@
   }
 
   .header-more {
-    float:  right;
+    float: right;
     margin-right: 10px;
     font-size: 13px;
   }

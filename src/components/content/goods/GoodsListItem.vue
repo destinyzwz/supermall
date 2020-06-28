@@ -29,7 +29,7 @@
     methods: {
       // 方式二：通过取消函数监听
       imageLoad() {
-        this.$bus.$emit('imageLoad');
+        this.$bus.$emit('itemImageLoad');
       },
 
 			// 方式一：通过路由路径来选择不同的事件监听
@@ -41,13 +41,21 @@
 				}
       }, */
       goodsitemClick() {
-        // console.log('点击商品详情');
-        this.$router.push('/detail/' + this.goodsItem.iid);
+        // console.log(this.goodsItem.iid);
+        // 动态路由
+        // this.$router.push('/detail/' + this.goodsItem.iid);
+        // 通过query
+        this.$router.push({
+          path: '/detail',
+          query: {
+            iid: this.goodsItem.iid
+          }
+        })
       }
     }
   }
 </script>
-<style>
+<style scoped>
   .goods-item {
     padding-bottom: 30px;
     width: 48%;

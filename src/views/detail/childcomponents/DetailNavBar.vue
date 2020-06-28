@@ -1,61 +1,62 @@
 <template>
-  <div >
+  <div>
     <nav-bar>
-      <div slot="left" class="imgBack" @click="routerBack">
-        <img src="~assets/img/common/back.svg" />
+      <div slot="left" class="back" @click="backClick">
+        <img src="~assets/img/common/back.svg" alt="">
       </div>
-      <div slot="center" class="detail">
+      <div slot="center" class="title">
         <div v-for="(item, index) in titles"
-              class="detail-item"
-              :class="{active: index===currentIndex}"
-              @click="itemClick(index)">{{ item }}</div>
+             class="title-item"
+             :class="{active: index === currentIndex}"
+             @click="titleClick(index)">
+          {{item}}
+        </div>
       </div>
     </nav-bar>
   </div>
 </template>
 
 <script>
-  import NavBar from 'components/common/navbar/NavBar.vue'
+  import NavBar from 'components/common/navbar/NavBar'
+
   export default {
     name: "DetailNavBar",
-    data() {
-      return {
-        titles: ['商品', '参数', '评论', '推荐'], //导航栏的信息
-        currentIndex: 0 //记录当前点击位置
-      }
-    },
     components: {
       NavBar
     },
+    data() {
+      return {
+        titles: ['商品', '参数', '评论', '推荐'],
+        currentIndex: 0
+      }
+    },
     methods: {
-      // 监听当前选中选项
-      itemClick(index) {
+      titleClick(index) {
         this.currentIndex = index;
+        this.$emit('titleClick', index);
       },
-      // 点击回退
-      routerBack() {
+      backClick() {
         this.$router.back();
       }
     }
   }
 </script>
 
-<style>
-  .detail{
+<style scoped>
+  .title {
     display: flex;
     font-size: 13px;
   }
 
-  .detail-item{
+  .title-item {
     flex: 1;
   }
 
-  .active{
-    clear: pink;
+  .active {
+    color: var(--color-high-text)
   }
 
-  .imgBack{
-    margin-top: 6px;
-    margin-left: 10px;
+  .back img {
+    margin-top: 12px;
   }
 </style>

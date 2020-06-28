@@ -1,52 +1,47 @@
 <template>
   <div v-if="Object.keys(detailInfo).length !== 0" class="goods-info">
     <div class="info-desc clear-fix">
-      <div class="start"></div>
-      <div class="desc">{{ detailInfo.desc }}</div>
+      <div class="start">
+      </div>
+      <div class="desc">{{detailInfo.desc}}</div>
       <div class="end"></div>
     </div>
-    <div class="info-key">{{ detailInfo.detailImage[0].key }}</div>
+    <div class="info-key">{{detailInfo.detailImage[0].key}}</div>
     <div class="info-list">
-      <img v-for="(item, index) in detailInfo.detailImage[0].list" :src="item" :key="index"  @load="imgLoad"/>
+      <img v-for="(item, index) in detailInfo.detailImage[0].list" :key="index" :src="item" @load="imgLoad" alt="">
     </div>
   </div>
 </template>
 
 <script>
-
-  export default{
-    name: "DetailGoodsInfo",
+	export default {
+		name: "DetailGoodsInfo",
     props: {
       detailInfo: {
-        type: Object,
-        default() {
-          return {}
-        }
+        type: Object
       }
     },
     data() {
-      return {
-        counter: 0, // 记录已加载图片数量
-        imagesLength: 0 // 记录图片总数
+			return {
+				counter: 0,
+        imagesLength: 0
       }
     },
     methods: {
-      imgLoad() {
-       // 方式一： 判断图片是否完全获取完，只发射一次事件
-        // if(++this.counter === this.imagesLength) {
-          this.$emit('detailImgLoad');
-        // }
-       // 方式二： 利用防抖函数
-         // this.$bus.$emit('detailImgLoad');
-      }
+	    imgLoad() {
+        // 判断, 所有的图片都加载完了, 那么进行一次回调就可以了.
+        if (++this.counter === this.imagesLength) {
+          this.$emit('imageLoad');
+        }
+	    }
     },
     watch: {
-      detailInfo() {
-        // 获取所有的图片的总长度
-        this.imagesLength = this.detailInfo.detailImage[0].list.length;
-      }
+	    detailInfo() {
+	      // 获取图片的个数
+	    	this.imagesLength = this.detailInfo.detailImage[0].list.length
+	    }
     }
-  }
+	}
 </script>
 
 <style scoped>

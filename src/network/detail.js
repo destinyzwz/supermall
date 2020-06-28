@@ -18,7 +18,7 @@ export function getRecommend() {
 }
 
 // 商品数据
-export class GoodsInfo {
+export class Goods {
   constructor(itemInfo, columns, services){
     this.title = itemInfo.title;
     this.desc = itemInfo.desc;
@@ -27,7 +27,6 @@ export class GoodsInfo {
     this.discount = itemInfo.discountDesc;
     this.columns = columns;
     this.services = services;
-    this.realPrice = itemInfo.lowNowPrice;
   }
 }
 

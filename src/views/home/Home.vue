@@ -37,9 +37,11 @@
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
   import {debounce} from 'common/utils'
+  import {itemListenerMixin} from 'common/mixin'
 
   export default{
     name: 'Home',
+    mixins: [itemListenerMixin],
     data() {
       return {
         banners: [],
@@ -54,7 +56,6 @@
         offsetTop: 0, // 距离顶部的距离
         isTabfixd: false, // 是否显示另一个tab来实现吸顶效果
         saveY: 0, // 离开时的位置
-        imgLoadListener: null // 保存图片加载监听函数
       }
     },
     components: {
@@ -84,8 +85,9 @@
     deactivated() {
       // 1. 保存离开时的位置信息
       this.saveY = this.$refs.scroll.getSaveY();
-      // 2. 取消图片加载函数的监听
-      this.$bus.$off('imgRefresh', this.imgLoadListener);
+
+      // 2. 取消全局事件的监听
+      this.$bus.$off("itemImageLoad", this.itemImgListener);
     },
     // create中的this是当前组件
     created() {
@@ -97,15 +99,13 @@
       this.getHomeGoods('sell');
     },
     mounted() {
-      // 1. 图片加载完成的事件监听 解决首页滚动区域bug
-      const refresh = debounce(this.$refs.scroll.refresh, 10);
-
-      this.imgLoadListener = () => {
-        // this.$refs.scroll && this.$refs.scroll.refresh();
-        // 添加防抖功能
+      // 1.图片加载完成的事件监听
+     /*
+     // 利用mixin混入实现防抖
+     const refresh = debounce(this.$refs.scroll.refresh, 50)
+      this.$bus.$on('itemImageLoad', () => {
         refresh();
-      }
-      this.$bus.$on('imageLoad', this.imgLoadListener);
+      }) */
     },
     methods: {
       /*
@@ -123,7 +123,7 @@
             this.currentType = 'sell';
             break;
         }
-        // 同步两个tancontrol栏的状态
+        // 同步两个tancont  rol栏的状态
         this.$refs.tabControl1.currentIndex = index;
         this.$refs.tabControl2.currentIndex = index;
       },

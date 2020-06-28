@@ -63,7 +63,6 @@
 
       // 解决首页滚动bug
       refresh() {
-        // console.log("--------");
         this.bscroll && this.bscroll.refresh();
       },
 
