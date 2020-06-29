@@ -13,6 +13,8 @@
       <detail-comment-info ref="comment" :commentInfo="commentInfo"/>
       <goods-list ref="recommend" :goods="recommendInfo"/>
     </scroll>
+    <detail-bottom-bar @addCart="addCart"/>
+    <back-top @click.native="backClick" v-show="isShowBack"/>
   </div>
 </template>
 
@@ -24,6 +26,7 @@
   import DetailGoodsInfo from './childcomponents/DetailGoodsInfo'
   import DetailParamInfo from './childcomponents/DetailParamsInfo'
   import DetailCommentInfo from './childcomponents/DetailCommentInfo'
+  import DetailBottomBar from './childcomponents/DetailBottomBar'
 
   import {getDetail, getRecommend, Goods, Shop, GoodsParam} from "network/detail"
 
@@ -31,7 +34,7 @@
   import GoodsList from 'components/content/goods/GoodsList'
 
   import {debounce} from 'common/utils'
-  import {itemListenerMixin} from 'common/mixin'
+  import {itemListenerMixin,backTopMixin} from 'common/mixin'
 
   export default {
     name: "Detail",
@@ -44,9 +47,10 @@
       DetailParamInfo,
       DetailCommentInfo,
       GoodsList,
-      Scroll
+      Scroll,
+      DetailBottomBar,
     },
-    mixins: [itemListenerMixin],
+    mixins: [itemListenerMixin,backTopMixin],
     data() {
       return {
         iid: null, // 详情页商品id
@@ -190,6 +194,32 @@
            this.$refs.nav.currentIndex = this.currentIndex;
          }
        }
+
+       // 3. 显示回顶小图标
+       this.listenShowBackTop(position);
+      },
+      // 商品添加购物车功能
+      addCart() {
+        // 1. 获取购物车需要展示的信息
+        const product = {};
+        product.iid = this.iid;
+        product.image = this.topImages[0];
+        product.title = this.goods.title;
+        product.desc = this.goods.desc;
+        product.price = this.goods.newPrice;
+
+        // 2. 将展示信息添加到vuex中
+        /*
+        // 直接修改state中数据，但不建议
+        this.$store.cartList.push(product);
+        */
+
+        // 通过mutations修改state中的数据(单一事件)
+        // this.$store.commit('addShopCart', product);
+
+        // 通过actions修改state中数据(异步或复杂逻辑)
+        this.$store.dispatch('addShopCart', product);
+        console.log(this.$store.state.cartList);
       }
     }
   }

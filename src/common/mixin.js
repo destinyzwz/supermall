@@ -1,5 +1,7 @@
 import {debounce} from './utils';
+import BackTop from 'components/content/backTop/BackTop';
 
+// 这是用来监听图片加载
 export const itemListenerMixin = {
   data() {
     return {
@@ -16,5 +18,26 @@ export const itemListenerMixin = {
       this.newRefresh();
     }
     this.$bus.$on('itemImageLoad', this.itemImgListener);
+  }
+}
+
+// 这是用来实现点击返回顶部的功能
+export const backTopMixin = {
+  components: {
+    BackTop
+  },
+  data() {
+    return {
+      isShowBack: false, // 回顶部按钮的显示默认为false
+    }
+  },
+  methods: {
+    // 监听返回顶部按钮的方式
+    backClick() {
+      this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0);
+    },
+    listenShowBackTop(position) {
+      this.isShowBack = (-position.y) > 1000 ;
+    }
   }
 }

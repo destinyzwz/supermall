@@ -33,15 +33,14 @@
   import Scroll from 'components/common/scroll/Scroll'
   import TabControl from 'components/content/tabcontrol/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
-  import BackTop from 'components/content/backTop/BackTop'
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
   import {debounce} from 'common/utils'
-  import {itemListenerMixin} from 'common/mixin'
+  import {itemListenerMixin,backTopMixin} from 'common/mixin'
 
   export default{
     name: 'Home',
-    mixins: [itemListenerMixin],
+    mixins: [itemListenerMixin,backTopMixin],
     data() {
       return {
         banners: [],
@@ -52,7 +51,7 @@
           'sell': {page: 0, list: []}
         }, // 商品数据
         currentType: 'pop',
-        isShowBack: false, // 回顶部按钮的显示默认为false
+        // isShowBack: false, // 回顶部按钮的显示默认为false 利用混入进行封装
         offsetTop: 0, // 距离顶部的距离
         isTabfixd: false, // 是否显示另一个tab来实现吸顶效果
         saveY: 0, // 离开时的位置
@@ -66,7 +65,6 @@
       TabControl,
       GoodsList,
       Scroll,
-      BackTop
     },
     computed: {
       showGoods() {
@@ -127,14 +125,15 @@
         this.$refs.tabControl1.currentIndex = index;
         this.$refs.tabControl2.currentIndex = index;
       },
-      // 监听返回顶部按钮的方式
-     backClick() {
-       this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0);
-     },
+      // 监听返回顶部按钮的方式 利用混入封装
+     // backClick() {
+     //   this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0);
+     // },
      // 获取当前位置
      ScrollPosition(position) {
-       // 1. 显示对顶小图标
-       this.isShowBack = (-position.y) > 1000 ;
+       // 1. 显示回顶小图标
+       // this.isShowBack = (-position.y) > 1000 ;
+       this.listenShowBackTop(position);
        // 2. 显示吸顶效果
        this.isTabfixd = (-position.y) > this.offsetTop;
      },
